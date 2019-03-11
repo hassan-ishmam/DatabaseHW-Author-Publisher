@@ -1,0 +1,15 @@
+CREATE TABLE WritingGroups (
+  GroupName VARCHAR(20) NOT NULL,
+  HeadWriter VARCHAR(30),
+  YearFormed YEAR,
+  Subject VARCHAR(20),
+  CONSTRAINT WritingGroups PRIMARY KEY (GroupName)
+) ;
+
+CREATE TABLE Books (
+  BookTitle VARCHAR(30) NOT NULL,
+  PublisherName VARCHAR(30),
+  YearPublished YEAR,
+  NumberPages INT,
+  CONSTRAINT WritingGroups PRIMARY KEY (GroupName)
+) ;
