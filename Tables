@@ -1,5 +1,5 @@
 CREATE TABLE writing_groups (
-  group_name VARCHAR(50) NOT NULL,
+  group_name VARCHAR(20) NOT NULL,
   head_writer VARCHAR(30),
   year_formed INT,
   subject VARCHAR(20),
@@ -9,17 +9,17 @@ CREATE TABLE writing_groups (
 CREATE TABLE books (
   book_title VARCHAR(30) NOT NULL,
   group_name VARCHAR(20) NOT NULL,
-  publisher_name VARCHAR(30),
+  publisher_name VARCHAR(20) NOT NULL,
   year_published INT,
   number_pages INT,
   CONSTRAINT pk_groupName_bookTitle PRIMARY KEY (book_title, group_name)
 ) ;
 
 CREATE TABLE publishers (
-  publisher_name VARCHAR(50) NOT NULL,
-  pub_address VARCHAR(20) NOT NULL,
-  pub_phone INT,
-  pub_email VARCHAR(20),
+  publisher_name VARCHAR(20) NOT NULL,
+  pub_address VARCHAR(50) NOT NULL,
+  pub_phone VARCHAR(20),
+  pub_email VARCHAR(50),
   CONSTRAINT pk_pubName PRIMARY KEY (publisher_name)
 ) ;
 
@@ -33,22 +33,21 @@ ALTER TABLE books
           FOREIGN KEY (publisher_name)
           REFERENCES publishers (publisher_name);
 
-INSERT INTO writing_groups VALUES('WritingWarriors','Alice','1998','fantasy');
-INSERT INTO writing_groups VALUES('LonleyLoggers','Steven','2015','rom-com');
-INSERT INTO writing_groups VALUES('PersonalPagers','Tarius','2019','fiction');
-
-INSERT INTO books VALUES('Prince''s Inferno','WritingWarriors','Abatis Publishers','1998', '341');
-INSERT INTO books VALUES('Love and Letter','LonleyLoggers','Core Dump Books','2012', '294');
-INSERT INTO books VALUES('The Prey in the Ice','PersonalPagers','Tenterhooks Press','2014', '522');
+INSERT INTO writing_groups VALUES('WritingWarriors','Alice',1998,'fantasy');
+INSERT INTO writing_groups VALUES('LonleyLoggers','Steven',2015,'rom-com');
+INSERT INTO writing_groups VALUES('PersonalPagers','Tarius',2019,'fiction');
 
 INSERT INTO publishers VALUES('Abatis Publishers','75 West 205 St, Bronx, NY, 10468','718-496-7223','AP_writers@gmail.com');
 INSERT INTO publishers VALUES('Core Dump Books','3800 Waldo Ave, #14F, San Francisco, CA, 94123','415-549-4278','CDB_groups@gmail.com');
 INSERT INTO publishers VALUES('Tenterhooks Press','390 Serra Mall, Palo Alto, CA, 94305','650-836-7128','TTP_writersINC@gmail.com');
+
+INSERT INTO books VALUES('Prince''s Inferno','WritingWarriors','Abatis Publishers',1998, 341);
+INSERT INTO books VALUES('Love and Letter','LonleyLoggers','Core Dump Books',2012, 294);
+INSERT INTO books VALUES('The Prey in the Ice','PersonalPagers','Tenterhooks Press',2014, 522);
+
 
 -- SELECT * from writing_groups;
 -- 
 -- SELECT * from books;
 -- 
 -- SELECT * from publishers;
-
--- Not sure why values aren't being inserted into table
