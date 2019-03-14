@@ -2,14 +2,13 @@ package jdbc;
 import java.sql.*;
 import java.util.Scanner;
 
+
 /**
  *
  * @author Mimi Opkins with some tweaking from Dave Brown
  */
 public class JDBC {
     //  Database credentials
-//    static String USER;
-//    static String PASS;
     static String DBNAME;
     //This is the specification for the printout that I'm doing:
     //each % denotes the start of a new field.
@@ -17,11 +16,13 @@ public class JDBC {
     //The number indicates how wide to make the field.
     //The "s" denotes that it's a string.  All of our output in this test are
     //strings, but that won't always be the case.
-    static final String displayFormat="%-20s%-20s%-20s%-20s\n";
+    static final String displayFormat="%-20s\n";
+    static final String displayFormatPubData="%-20s%-50s%-20s%-30s%-20s\n";
+    static final String displayFormatFull="%-20s%-20s%-20s%-20s%-20s\n";
 // JDBC driver name and database URL
     static final String JDBC_DRIVER = "org.apache.derby.jdbc.ClientDriver";
     static String DB_URL = "jdbc:derby://localhost:1527/";
-//            + "testdb;user=";
+
 /**
  * Takes the input string and outputs "N/A" if the string is empty or null.
  * @param input The string to be mapped.
@@ -42,15 +43,13 @@ public class JDBC {
         Scanner in = new Scanner(System.in);
         System.out.print("Name of the database (not the user account): ");
         DBNAME = in.nextLine();
-//        System.out.print("Database user name: ");
-//        USER = in.nextLine();
-//        System.out.print("Database password: ");
-//        PASS = in.nextLine();
+
         //Constructing the database URL connection string
-//        DB_URL = DB_URL + DBNAME + ";user="+ USER + ";password=" + PASS;
         DB_URL = DB_URL + DBNAME;
         Connection conn = null; //initialize the connection
-        Statement stmt = null;  //initialize the statement that we're using
+        Statement stmt =null;  //initialize the statement that we're using
+        PreparedStatement pstmt = null;
+        
         try {
             //STEP 2: Register JDBC driver
             Class.forName("org.apache.derby.jdbc.ClientDriver");
@@ -58,31 +57,145 @@ public class JDBC {
             //STEP 3: Open a connection
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL);
-
-            //STEP 4: Execute a query
-            System.out.println("Creating statement...");
-            stmt = conn.createStatement();
-            String sql;
-            sql = "SELECT * FROM writing_groups";
-            ResultSet rs = stmt.executeQuery(sql);
-
-            //STEP 5: Extract data from result set
-            System.out.printf(displayFormat, "Group Name", "Head Writer", "Year Formed", "Subject");
-            while (rs.next()) {
-                //Retrieve by column name
-                String group_name = rs.getString("group_name");
-                String head_writer = rs.getString("head_writer");
-                String year_formed = rs.getString("year_formed");
-                String subject = rs.getString("subject");
-
-                //Display values
-                System.out.printf(displayFormat,
-                        dispNull(group_name), dispNull(head_writer), dispNull(year_formed), dispNull(subject));
+            
+            //STEP 4: CREATE MENU
+            boolean invalid = true;
+            while(invalid){
+                System.out.println("1. List all writing groups\n"
+                        + "2. Select group\n" //FIX LONELYLOGGERS
+                        + "3. List all publishers\n"
+                        + "4. Select publisher\n"
+                        + "5. List all book titles\n"
+                        + "6. Select book\n"
+                        + "7. Insert a new book\n"
+                        + "8. Insert new publisher and update\n"
+                        + "9. Remove book");
+                
+                //STEP 5: GET USER INPUT AND DISPLAY INFO
+                int user_input = in.nextInt();
+                in.nextLine();
+                switch(user_input){
+                    case 1:
+                        stmt = conn.createStatement();
+                        String sql;
+                        sql = "SELECT * FROM writing_groups";
+                        ResultSet rs = stmt.executeQuery(sql);
+                        while (rs.next()) {
+                            //Retrieve by column name
+                            String group_name = rs.getString("group_name");
+                            //Display values
+                            System.out.printf(displayFormat,
+                                    dispNull(group_name));
+                        }
+                        rs.close();
+                        stmt.close();
+                        break;
+                    case 2:
+                        sql = "SELECT * FROM writing_groups NATURAL JOIN books WHERE group_name= ?";
+                        System.out.println("Select Group Name:\n");
+                        String user_string = in.nextLine();
+                        
+                        pstmt = conn.prepareStatement(sql);
+                        pstmt.setString(1, user_string);
+                        rs = pstmt.executeQuery();
+                        System.out.printf(displayFormatFull, "Group Name", "Head Writer", "Year Formed", "Subject", "Book Title");
+                        while (rs.next()) {
+                            String group_name = rs.getString("group_name");
+                            String head_writer = rs.getString("head_writer");
+                            String year_formed = rs.getString("year_formed");
+                            String subject = rs.getString("subject");
+                            String book_title = rs.getString("book_title");
+                            //Display values
+                            
+                            System.out.printf(displayFormatFull,
+                            dispNull(group_name), dispNull(head_writer), dispNull(year_formed), dispNull(subject), dispNull(book_title));
+                        }
+                        rs.close();
+                        pstmt.close();
+                        break;
+                    case 3:
+                        stmt = conn.createStatement();
+                        
+                        sql = "SELECT * FROM publishers";
+                        rs = stmt.executeQuery(sql);
+                        while (rs.next()) {
+                            //Retrieve by column name
+                            String group_name = rs.getString("publisher_name");
+                            //Display values
+                            System.out.printf(displayFormat,
+                                    dispNull(group_name));
+                        }
+                        rs.close();
+                        stmt.close();
+                        break;
+                    case 4:
+                        sql = "SELECT * FROM publishers NATURAL JOIN books WHERE publisher_name= ?";
+                        System.out.println("Select Publisher Name:\n");
+                        user_string = in.nextLine();
+                        pstmt = conn.prepareStatement(sql);
+                        pstmt.setString(1, user_string);
+                        rs = pstmt.executeQuery();
+                        System.out.printf(displayFormatPubData, "Publisher Name", "Publisher Address", "Publisher Phone", "Publisher Email", "Book Title");
+                        while (rs.next()) {
+                            String publisher_name = rs.getString("publisher_name");
+                            String pub_address = rs.getString("pub_address");
+                            String pub_phone = rs.getString("pub_phone");
+                            String pub_email = rs.getString("pub_email");
+                            String book_title = rs.getString("book_title");
+                            //Display values
+                            System.out.printf(displayFormatPubData,
+                            dispNull(publisher_name), dispNull(pub_address), dispNull(pub_phone), dispNull(pub_email), dispNull(book_title));
+                        }
+                        rs.close();
+                        pstmt.close();
+                        break;
+                    case 5:
+                        stmt = conn.createStatement();
+                        sql = "SELECT * FROM books";
+                        rs = stmt.executeQuery(sql);
+                        while (rs.next()) {
+                            //Retrieve by column name
+                            String group_name = rs.getString("book_title");
+                            //Display values
+                            System.out.printf(displayFormat,
+                                    dispNull(group_name));
+                        }
+                        rs.close();
+                        stmt.close();
+                        break;
+                    case 6:
+                        sql = "SELECT * FROM books NATURAL JOIN Publishers NATURAL JOIN writing_groups WHERE book_title = ?";
+                        System.out.println("Select Book Title Name:\n");
+                        user_string = in.nextLine();
+                        pstmt = conn.prepareStatement(sql);
+                        pstmt.setString(1, user_string);
+                        rs = pstmt.executeQuery();
+                        System.out.printf(displayFormatFull, "Book Title", "Group Name", "Publisher Name", "Year Published", "Number of Pages");
+                        while (rs.next()) {
+                            String book_title = rs.getString("book_title");
+                            String group_name = rs.getString("group_name");
+                            String publisher_name = rs.getString("publisher_name");
+                            String year_published = rs.getString("year_published");
+                            String number_pages = rs.getString("number_pages");
+                            //Display values
+                            System.out.printf(displayFormatFull,
+                            dispNull(book_title), dispNull(group_name), dispNull(publisher_name), dispNull(year_published), dispNull(number_pages));
+                        }
+                        rs.close();
+                        pstmt.close();
+                        break;
+                    case 7:
+                        break;
+                    case 8:
+                        break;
+                    case 9:
+                        break;
+                    default:
+                        break;
+                                
+                }
             }
-            //STEP 6: Clean-up environment
-            rs.close();
-            stmt.close();
-            conn.close();
+        //STEP 6: Cleanup
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
