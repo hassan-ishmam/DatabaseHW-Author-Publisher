@@ -10,12 +10,12 @@
  *          the output
  **/
  
-package jdbcproject;
+package jdbc;
 import java.sql.*;
 import java.util.Scanner;
 
 
-public class JDBCProject {
+public class JDBC {
     //Variables that will be using through this program.
     static String DBNAME;
     //This is the specification for the printout that I'm doing:
@@ -61,7 +61,7 @@ public class JDBCProject {
             boolean invalid = true;
             while(invalid){
                 System.out.println("1. List all writing groups\n"
-                        + "2. Select group\n" //FIX LONELYLOGGERS
+                        + "2. Select group\n"
                         + "3. List all publishers\n"
                         + "4. Select publisher\n"
                         + "5. List all book titles\n"
@@ -352,7 +352,7 @@ public class JDBCProject {
                             String group_name = rs.getString("book_title");
                             //Display values
                             System.out.printf(displayFormat,
-                                    dispNull(group_name));
+                                    noInput(group_name));
                         }
                         rs.close();
                         System.out.println();
