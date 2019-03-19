@@ -279,15 +279,16 @@ public class JDBCProject {
                         System.out.print("\nSelect from the publishers above to delete: "); 
                         publisher = in.nextLine();
                         
-                        /**
-                         * This is what I tried for replacement, it didn't work.
-                         */
+                        //Replaces the old publisher with the new publisher 
                         String replaceSql = "UPDATE books SET publisher_name = ? WHERE publisher_name = ?";
                         pstmt = conn.prepareStatement(replaceSql);
                         pstmt.setString(1, publisher_name);
                         pstmt.setString(2, publisher);
+                        pstmt.executeUpdate();
+                        pstmt.close();
                         
-                        String deleteSql = "DELETE FROM books WHERE publisher_name = ?";
+                        //Deletes the old publisher
+                        String deleteSql = "DELETE FROM publishers WHERE publisher_name = ?";
                         pstmt = conn.prepareStatement(deleteSql);
                         pstmt.setString(1, publisher);
                         pstmt.executeUpdate();
