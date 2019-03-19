@@ -98,7 +98,7 @@ public class JDBCProject {
                         System.out.println();
                         break;
                     case 2:
-                        sql = "SELECT * FROM writing_groups NATURAL JOIN books WHERE group_name= ?";
+                        sql = "SELECT * FROM writing_groups NATURAL JOIN books NATURAL JOIN publishers WHERE group_name= ?";
                         System.out.println("Select Group Name:\n");
                         String user_string = in.nextLine();
                         
