@@ -234,15 +234,15 @@ public class JDBC {
                         
                         //Adding New Book to the table
                         
-                        sql = "INSERT INTO books VALUES('?','?','?',?, ?);";
+                        sql = "INSERT INTO books VALUES(?,?,?,?, ?)";
                         pstmt = conn.prepareStatement(sql);
                         pstmt.setString(1, b_title);
                         pstmt.setString(2, writingGroup);
                         pstmt.setString(3, publisher);
                         pstmt.setInt(4, year_published);
                         pstmt.setInt(5, number_pages);
+                        pstmt.executeUpdate();
                         pstmt.close();
-                        break;
                         break;
                     case 8:
                         break;
