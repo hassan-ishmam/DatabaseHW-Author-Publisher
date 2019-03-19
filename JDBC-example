@@ -1,4 +1,4 @@
-package jdbc;
+package jdbcproject;
 import java.sql.*;
 import java.util.Scanner;
 
@@ -7,7 +7,7 @@ import java.util.Scanner;
  *
  * @author Mimi Opkins with some tweaking from Dave Brown
  */
-public class JDBC {
+public class JDBCProject {
     //  Database credentials
     static String DBNAME;
     //This is the specification for the printout that I'm doing:
@@ -245,6 +245,53 @@ public class JDBC {
                         pstmt.close();
                         break;
                     case 8:
+                        //Enter the data for the new publisher.
+                        System.out.println("Please enter the publisher's name: ");
+                        String publisher_name = in.nextLine();
+                        System.out.println("Please enter the publisher's address: ");
+                        String publisher_address = in.nextLine();
+                        System.out.println("Please enter the publisher's phone: ");
+                        String publisher_phone = in.nextLine();
+                        System.out.println("Please enter the publisher's email: ");
+                        String publisher_email = in.nextLine();
+                        sql = "INSERT INTO publishers VALUES(?,?,?,?)";
+                        pstmt = conn.prepareStatement(sql);
+                        pstmt.setString(1, publisher_name);
+                        pstmt.setString(2, publisher_address);
+                        pstmt.setString(3, publisher_phone);
+                        pstmt.setString(4, publisher_email);
+                        pstmt.executeUpdate();
+                        pstmt.close();
+                        
+                        //Getting the publisher
+                        stmt = conn.createStatement();
+                        System.out.println();
+                        sqlForPublishers = "SELECT * FROM publishers";
+                        rs = stmt.executeQuery(sqlForPublishers);
+                        while (rs.next()) {                       
+                            //Retrieve by column name
+                            String pub = rs.getString("publisher_name");
+                            //Display values
+                            System.out.printf(displayFormat,
+                                    dispNull(pub));
+                        }                        
+                        rs.close();                        
+                        System.out.print("\nSelect from the publishers above to delete: "); 
+                        publisher = in.nextLine();
+                        
+                        /**
+                         * This is what I tried for replacement, it didn't work.
+                         */
+                        String replaceSql = "UPDATE books SET publisher_name = ? WHERE publisher_name = ?";
+                        pstmt = conn.prepareStatement(replaceSql);
+                        pstmt.setString(1, publisher_name);
+                        pstmt.setString(2, publisher);
+                        
+                        String deleteSql = "DELETE FROM books WHERE publisher_name = ?";
+                        pstmt = conn.prepareStatement(deleteSql);
+                        pstmt.setString(1, publisher);
+                        pstmt.executeUpdate();
+                        pstmt.close();
                         break;
                     case 9:
                         System.out.println("List of books: ");
@@ -264,7 +311,7 @@ public class JDBC {
                         String bookName = in.nextLine();
                         
                         
-                        String deleteSql = "DELETE FROM books WHERE book_title = ?";
+                        deleteSql = "DELETE FROM books WHERE book_title = ?";
                         pstmt = conn.prepareStatement(deleteSql);
                         pstmt.setString(1, bookName);
                         pstmt.executeUpdate();
