@@ -312,7 +312,7 @@ public class JDBCProject {
                         System.out.println();
                         break;
                     case 9:
-                        System.out.println("List of books: ");
+                      System.out.println("List of books: ");
                         stmt = conn.createStatement();
                         sql = "SELECT * FROM books";
                         rs = stmt.executeQuery(sql);
@@ -335,6 +335,21 @@ public class JDBCProject {
                         pstmt.executeUpdate();
                         pstmt.close();
                         System.out.println();
+                        
+                        System.out.println("New list of books: ");
+                        stmt = conn.createStatement();
+                        sql = "SELECT * FROM books";
+                        rs = stmt.executeQuery(sql);
+                        while (rs.next()) {
+                            //Retrieve by column name
+                            String group_name = rs.getString("book_title");
+                            //Display values
+                            System.out.printf(displayFormat,
+                                    dispNull(group_name));
+                        }
+                        rs.close();
+                        System.out.println();
+                        
                         break;
                     default:
                         break;
