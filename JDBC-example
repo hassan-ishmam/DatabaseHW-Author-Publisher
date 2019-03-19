@@ -1,3 +1,15 @@
+/**
+ * @author Anthony Diaz
+ * @author Hassan Ishmam
+ * @author Jon Ham
+ * March 19, 2019
+ * Purpose: This is the main method of the project. It operates on the database
+ *          by adding, deleting and modifying information
+ * Inputs:  It asks the user what they would like to do with the database
+ * Outputs: Depending on the user input, it operates on the database and displays
+ *          the output
+ **/
+ 
 package jdbcproject;
 import java.sql.*;
 import java.util.Scanner;
