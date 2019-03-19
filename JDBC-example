@@ -36,7 +36,8 @@ public class JDBCProject {
         else
             return userInput;
     }
-
+    
+    //Main function
     public static void main(String[] args) {
         //Get the input for the name of the database and find it.
         Scanner in = new Scanner(System.in);
@@ -258,6 +259,7 @@ public class JDBCProject {
                         break;
                     case 8:
                         //Enter the data for the new publisher.
+                        
                         System.out.println("Please enter the publisher's name: ");
                         String publisher_name = in.nextLine();
                         System.out.println("Please enter the publisher's address: ");
@@ -266,6 +268,8 @@ public class JDBCProject {
                         String publisher_phone = in.nextLine();
                         System.out.println("Please enter the publisher's email: ");
                         String publisher_email = in.nextLine();
+                        
+                        //Inserts data into table
                         sql = "INSERT INTO publishers VALUES(?,?,?,?)";
                         pstmt = conn.prepareStatement(sql);
                         pstmt.setString(1, publisher_name);
@@ -308,6 +312,7 @@ public class JDBCProject {
                         System.out.println();
                         break;
                     case 9:
+                    //Displays old list of books
                       System.out.println("List of books: ");
                         stmt = conn.createStatement();
                         sql = "SELECT * FROM books";
@@ -321,6 +326,8 @@ public class JDBCProject {
                         }
                         rs.close();
                         
+                        //Asks the user which book to delete
+                        
                         System.out.println("Enter the name of the book to delete: ");
                         String bookName = in.nextLine();
                         
@@ -332,6 +339,7 @@ public class JDBCProject {
                         pstmt.close();
                         System.out.println();
                         
+                        //Displays new list of books 
                         System.out.println("New list of books: ");
                         stmt = conn.createStatement();
                         sql = "SELECT * FROM books";
