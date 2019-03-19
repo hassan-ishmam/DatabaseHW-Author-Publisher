@@ -27,6 +27,7 @@ public class JDBCProject {
     static final String displayFormat="%-20s\n";
     static final String displayFormatPubData="%-20s%-50s%-20s%-30s%-20s\n";
     static final String displayFormatFull="%-20s%-20s%-20s%-20s%-20s\n";
+    static final String displayFormatWG="%-20s%-20s%-20s%-20s%-20s%-20s\n";
     static final String JDBC_DRIVER = "org.apache.derby.jdbc.ClientDriver";
     static String DB_URL = "jdbc:derby://localhost:1527/";
 
@@ -105,17 +106,19 @@ public class JDBCProject {
                         pstmt = conn.prepareStatement(sql);
                         pstmt.setString(1, user_string);
                         rs = pstmt.executeQuery();
-                        System.out.printf(displayFormatFull, "Group Name", "Head Writer", "Year Formed", "Subject", "Book Title");
+                        System.out.printf(displayFormatWG, "Group Name", "Head Writer", "Year Formed", "Subject", "Book Title", "Publisher Name");
                         while (rs.next()) {
+                            
                             String group_name = rs.getString("group_name");
                             String head_writer = rs.getString("head_writer");
                             String year_formed = rs.getString("year_formed");
                             String subject = rs.getString("subject");
                             String book_title = rs.getString("book_title");
+                            String publisher_name = rs.getString("publisher_name");
                             //Display values
                             
-                            System.out.printf(displayFormatFull,
-                            noInput(group_name), noInput(head_writer), noInput(year_formed), noInput(subject), noInput(book_title));
+                            System.out.printf(displayFormatWG,
+                            noInput(group_name), noInput(head_writer), noInput(year_formed), noInput(subject), noInput(book_title),noInput(publisher_name));
                         }
                         rs.close();
                         pstmt.close();
