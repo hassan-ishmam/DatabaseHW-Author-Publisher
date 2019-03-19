@@ -185,6 +185,64 @@ public class JDBC {
                         pstmt.close();
                         break;
                     case 7:
+                        System.out.print("Enter book title: ");
+                        String b_title= in.nextLine();
+                        System.out.print("Enter Year Published: ");
+                        int year_published = in.nextInt();
+                        System.out.print("Enter Number of pages: ");
+                        int number_pages = in.nextInt();
+                        in.nextLine();
+                        
+                        
+                        //Getting the publisher
+                        
+                        stmt = conn.createStatement();
+                        System.out.println();
+                        String sqlForPublishers = "SELECT * FROM publishers";
+                        rs = stmt.executeQuery(sqlForPublishers);
+                        while (rs.next()) {
+                         
+                            //Retrieve by column name
+                            String pub = rs.getString("publisher_name");
+                            //Display values
+                            System.out.printf(displayFormat,
+                                    dispNull(pub));
+                        }
+                        
+                        rs.close();
+                        
+                        System.out.print("\nSelect from the publishers above: "); 
+                        String publisher = in.nextLine();
+      
+                        //Getting the writing group
+                        
+                        String sqlForWritingGroups = "SELECT * FROM writing_groups";
+                        rs = stmt.executeQuery(sqlForWritingGroups);
+                        while (rs.next()) {
+                            //Retrieve by column name
+                            String wGroup = rs.getString("group_name");
+                            //Display values
+                            System.out.printf(displayFormat,
+                                    dispNull(wGroup));
+                        }
+                        
+                        rs.close();
+                       
+                        
+                        System.out.print("\nSelect one of the Working Groups: ");
+                        String writingGroup = in.nextLine();
+                        
+                        //Adding New Book to the table
+                        
+                        sql = "INSERT INTO books VALUES('?','?','?',?, ?);";
+                        pstmt = conn.prepareStatement(sql);
+                        pstmt.setString(1, b_title);
+                        pstmt.setString(2, writingGroup);
+                        pstmt.setString(3, publisher);
+                        pstmt.setInt(4, year_published);
+                        pstmt.setInt(5, number_pages);
+                        pstmt.close();
+                        break;
                         break;
                     case 8:
                         break;
