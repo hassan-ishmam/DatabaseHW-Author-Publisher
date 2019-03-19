@@ -3,12 +3,8 @@ import java.sql.*;
 import java.util.Scanner;
 
 
-/**
- *
- * @author Mimi Opkins with some tweaking from Dave Brown
- */
 public class JDBCProject {
-    //  Database credentials
+    //Variables that will be using through this program.
     static String DBNAME;
     //This is the specification for the printout that I'm doing:
     //each % denotes the start of a new field.
@@ -19,46 +15,35 @@ public class JDBCProject {
     static final String displayFormat="%-20s\n";
     static final String displayFormatPubData="%-20s%-50s%-20s%-30s%-20s\n";
     static final String displayFormatFull="%-20s%-20s%-20s%-20s%-20s\n";
-// JDBC driver name and database URL
     static final String JDBC_DRIVER = "org.apache.derby.jdbc.ClientDriver";
     static String DB_URL = "jdbc:derby://localhost:1527/";
 
-/**
- * Takes the input string and outputs "N/A" if the string is empty or null.
- * @param input The string to be mapped.
- * @return  Either the input string or "N/A" as appropriate.
- */
-    public static String dispNull (String input) {
-        //because of short circuiting, if it's null, it never checks the length.
-        if (input == null || input.length() == 0)
-            return "N/A";
+    public static String noInput(String userInput) {
+        if (userInput == null || userInput.length() == 0)
+            return "Not found.";
         else
-            return input;
+            return userInput;
     }
 
     public static void main(String[] args) {
-        //Prompt the user for the database name, and the credentials.
-        //If your database has no credentials, you can update this code to
-        //remove that from the connection string.
+        //Get the input for the name of the database and find it.
         Scanner in = new Scanner(System.in);
         System.out.print("Name of the database (not the user account): ");
         DBNAME = in.nextLine();
-
-        //Constructing the database URL connection string
         DB_URL = DB_URL + DBNAME;
-        Connection conn = null; //initialize the connection
-        Statement stmt =null;  //initialize the statement that we're using
+        
+        //Connection, statement, and prepared statement that we will be using.
+        Connection conn = null; 
+        Statement stmt =null; 
         PreparedStatement pstmt = null;
         
         try {
-            //STEP 2: Register JDBC driver
             Class.forName("org.apache.derby.jdbc.ClientDriver");
 
-            //STEP 3: Open a connection
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL);
             
-            //STEP 4: CREATE MENU
+            //Main menu
             boolean invalid = true;
             while(invalid){
                 System.out.println("1. List all writing groups\n"
@@ -71,9 +56,8 @@ public class JDBCProject {
                         + "8. Insert new publisher and update\n"
                         + "9. Remove book");
                 
-                //STEP 5: GET USER INPUT AND DISPLAY INFO
+                //Validate the user input.
                 int user_input;
-                //Validates the user input.
                 do {
                     System.out.println("\nPlease enter a valid number from the menu: ");
                     while (!in.hasNextInt()) {
@@ -94,7 +78,7 @@ public class JDBCProject {
                             String group_name = rs.getString("group_name");
                             //Display values
                             System.out.printf(displayFormat,
-                                    dispNull(group_name));
+                                    noInput(group_name));
                         }
                         rs.close();
                         stmt.close();
@@ -117,7 +101,7 @@ public class JDBCProject {
                             //Display values
                             
                             System.out.printf(displayFormatFull,
-                            dispNull(group_name), dispNull(head_writer), dispNull(year_formed), dispNull(subject), dispNull(book_title));
+                            noInput(group_name), noInput(head_writer), noInput(year_formed), noInput(subject), noInput(book_title));
                         }
                         rs.close();
                         pstmt.close();
@@ -132,7 +116,7 @@ public class JDBCProject {
                             String group_name = rs.getString("publisher_name");
                             //Display values
                             System.out.printf(displayFormat,
-                                    dispNull(group_name));
+                                    noInput(group_name));
                         }
                         rs.close();
                         stmt.close();
@@ -153,7 +137,7 @@ public class JDBCProject {
                             String book_title = rs.getString("book_title");
                             //Display values
                             System.out.printf(displayFormatPubData,
-                            dispNull(publisher_name), dispNull(pub_address), dispNull(pub_phone), dispNull(pub_email), dispNull(book_title));
+                            noInput(publisher_name), noInput(pub_address), noInput(pub_phone), noInput(pub_email), noInput(book_title));
                         }
                         rs.close();
                         pstmt.close();
@@ -167,7 +151,7 @@ public class JDBCProject {
                             String group_name = rs.getString("book_title");
                             //Display values
                             System.out.printf(displayFormat,
-                                    dispNull(group_name));
+                                    noInput(group_name));
                         }
                         rs.close();
                         stmt.close();
@@ -188,7 +172,7 @@ public class JDBCProject {
                             String number_pages = rs.getString("number_pages");
                             //Display values
                             System.out.printf(displayFormatFull,
-                            dispNull(book_title), dispNull(group_name), dispNull(publisher_name), dispNull(year_published), dispNull(number_pages));
+                            noInput(book_title), noInput(group_name), noInput(publisher_name), noInput(year_published), noInput(number_pages));
                         }
                         rs.close();
                         pstmt.close();
@@ -215,7 +199,7 @@ public class JDBCProject {
                             String pub = rs.getString("publisher_name");
                             //Display values
                             System.out.printf(displayFormat,
-                                    dispNull(pub));
+                                    noInput(pub));
                         }
                         
                         rs.close();
@@ -232,7 +216,7 @@ public class JDBCProject {
                             String wGroup = rs.getString("group_name");
                             //Display values
                             System.out.printf(displayFormat,
-                                    dispNull(wGroup));
+                                    noInput(wGroup));
                         }
                         
                         rs.close();
@@ -282,7 +266,7 @@ public class JDBCProject {
                             String pub = rs.getString("publisher_name");
                             //Display values
                             System.out.printf(displayFormat,
-                                    dispNull(pub));
+                                    noInput(pub));
                         }                        
                         rs.close();                        
                         System.out.print("\nSelect from the publishers above to delete: "); 
@@ -313,7 +297,7 @@ public class JDBCProject {
                             String group_name = rs.getString("book_title");
                             //Display values
                             System.out.printf(displayFormat,
-                                    dispNull(group_name));
+                                    noInput(group_name));
                         }
                         rs.close();
                         
@@ -332,7 +316,7 @@ public class JDBCProject {
                                 
                 }
             }
-        //STEP 6: Cleanup
+        //Catch any exceptions.
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -353,8 +337,8 @@ public class JDBCProject {
                 }
             } catch (SQLException se) {
                 se.printStackTrace();
-            }//end finally try
-        }//end try
-        System.out.println("Goodbye!");
-    }//end main
+            }
+        }
+        System.out.println("The program has ended. Have a nice day.");
+    }
 }
