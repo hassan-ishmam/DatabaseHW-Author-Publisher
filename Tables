@@ -42,7 +42,7 @@ INSERT INTO publishers VALUES('Core Dump Books','3800 Waldo Ave, #14F, San Franc
 INSERT INTO publishers VALUES('Tenterhooks Press','390 Serra Mall, Palo Alto, CA, 94305','650-836-7128','TTP_writersINC@gmail.com');
 
 INSERT INTO books VALUES('Prince''s Inferno','WritingWarriors','Abatis Publishers',1998, 341);
-INSERT INTO books VALUES('Love and Letter','LonleyLoggers','Core Dump Books',2012, 294);
+INSERT INTO books VALUES('Love and Letter','LonelyLoggers','Core Dump Books',2012, 294);
 INSERT INTO books VALUES('The Prey in the Ice','PersonalPagers','Tenterhooks Press',2014, 522);
 
 
