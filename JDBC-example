@@ -78,7 +78,7 @@ public class JDBCProject {
                     System.out.println("\nPlease enter a valid number from the menu: ");
                     while (!in.hasNextInt()) {
                         System.out.println("\nPlease enter an integer number: ");
-                        in.next(); // this is important!
+                        in.next();
                     }
                     user_input = in.nextInt();
                 } while (user_input < 1 || user_input > 9);
