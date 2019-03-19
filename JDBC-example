@@ -247,6 +247,28 @@ public class JDBC {
                     case 8:
                         break;
                     case 9:
+                        System.out.println("List of books: ");
+                        stmt = conn.createStatement();
+                        sql = "SELECT * FROM books";
+                        rs = stmt.executeQuery(sql);
+                        while (rs.next()) {
+                            //Retrieve by column name
+                            String group_name = rs.getString("book_title");
+                            //Display values
+                            System.out.printf(displayFormat,
+                                    dispNull(group_name));
+                        }
+                        rs.close();
+                        
+                        System.out.println("Enter the name of the book to delete: ");
+                        String bookName = in.nextLine();
+                        
+                        
+                        String deleteSql = "DELETE FROM books WHERE book_title = ?";
+                        pstmt = conn.prepareStatement(deleteSql);
+                        pstmt.setString(1, bookName);
+                        pstmt.executeUpdate();
+                        pstmt.close();
                         break;
                     default:
                         break;
