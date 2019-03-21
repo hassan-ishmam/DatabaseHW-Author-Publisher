@@ -1,7 +1,4 @@
 /**
- * @author Anthony Diaz
- * @author Hassan Ishmam
- * @author Jon Ham
  * March 19, 2019
  * Purpose: This is the main method of the project. It operates on the database
  *          by adding, deleting and modifying information
